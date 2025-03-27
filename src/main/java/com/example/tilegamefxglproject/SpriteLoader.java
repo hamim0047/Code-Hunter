@@ -9,24 +9,8 @@ import java.util.Objects;
 
 public class SpriteLoader {
 
-    // Load image from resources
-    public static Image loadImage(String imagePath) {
-        try {
 
-            Image image = new Image(Objects.requireNonNull(SpriteLoader.class.getResourceAsStream(imagePath)));
-            if (image.isError()) {
-                System.err.println("Error loading image: " + imagePath);
-            }
-            return image;
-        } catch (Exception e) {
-            System.err.println("Error loading image: " + imagePath);
-            e.printStackTrace();
-            return null; // Return null if the image cannot be loaded
-        }
-    }
-
-
-    // Load frames from sprite sheet
+     // Load frames from sprite sheet
     public static Image[] loadFrames(String imagePath, int frameWidth, int frameHeight, int rows, int columns) {
         List<Image> frames = new ArrayList<>();
         try {
@@ -47,7 +31,10 @@ public class SpriteLoader {
 
             // Extract frames from the sprite sheet
             for (int row = 0; row < rows; row++) {
-                for (int col = 0; col < columns; col++) {
+                // Check if we're on the last row
+                int colsInCurrentRow = (row == rows - 1) ? 2 : columns; // Last row has only 2 columns
+
+                for (int col = 0; col < colsInCurrentRow; col++) {
                     int x = col * frameWidth;
                     int y = row * frameHeight;
 
