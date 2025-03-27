@@ -22,7 +22,7 @@ public class Main extends Application {
     private TileMap tileMap;
     private Affine cameraTransform;
 
-    @Override
+ @Override
     public void start(Stage primaryStage) throws IOException {
         Pane root = new Pane();
         canvas = new Canvas(VIEWPORT_WIDTH * TILE_SIZE * 2, VIEWPORT_HEIGHT * TILE_SIZE * 2); // Adjusted for zoom
@@ -33,25 +33,38 @@ public class Main extends Application {
                 "src/main/resources/assets/maps/tileset.png");
 
         // Initialize player
-        player = new Player(1 * TILE_SIZE, 6.5 * TILE_SIZE, tileMap); // Pass tileMap to Player
+        player = new Player(1 * TILE_SIZE, 6.5 * TILE_SIZE, tileMap);
 
         // Initialize camera transform
         cameraTransform = new Affine();
 
-        // Draw initial scene
+        // Initialize enemies
+        enemyManager = new EnemyManager(tileMap);
+
+        // Initial draw
         drawGame();
 
-        // Handle player movement
+        // Handle player input (key press/release)
         Scene scene = new Scene(root);
         scene.setOnKeyPressed(event -> {
             player.handleKeyPress(event.getCode());
-            drawGame();
+            drawGame(); // Redraw immediately on key press
         });
 
         scene.setOnKeyReleased(event -> {
             player.handleKeyRelease(event.getCode());
-            drawGame();
+            drawGame(); // Redraw immediately on key release
         });
+
+        // Only the enemies are updated with AnimationTimer
+        AnimationTimer gameLoop = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                enemyManager.update(); // Only enemies are animated
+                drawGame();            // Redraw the whole scene
+            }
+        };
+        gameLoop.start();
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("JavaFX Tile Game Without FXGL");
