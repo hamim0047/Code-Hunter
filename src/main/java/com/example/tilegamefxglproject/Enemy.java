@@ -20,7 +20,7 @@ public class Enemy {
         this.x = x;
         this.y = y;
 
-        this.walkFrames = SpriteLoader.loadFrames(walkPath, SPRITE_SIZE, SPRITE_SIZE, 3, 2);
+        this.walkFrames = SpriteLoader.loadFrames(walkPath, SPRITE_SIZE, SPRITE_SIZE, 3, 3);
         this.deathFrames = SpriteLoader.loadFrames(deathPath, SPRITE_SIZE, SPRITE_SIZE, 3, 2);
     }
 
